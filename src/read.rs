@@ -1736,7 +1736,7 @@ pub fn read_zipfile_from_stream<'a, R: Read>(reader: &'a mut R) -> ZipResult<Opt
     match block.magic().from_le() {
         spec::Magic::LOCAL_FILE_HEADER_SIGNATURE => (),
         spec::Magic::CENTRAL_DIRECTORY_HEADER_SIGNATURE => return Ok(None),
-        _ => return Err(ZipLocalEntryBlock::WRONG_MAGIC_ERROR),
+        _ =>  (),
     }
 
     let block = block.from_le();
