@@ -690,11 +690,11 @@ impl ZipFileData {
         /* FIXME: these were previously incorrect: add testing! */
         /* flags & (1 << 3) != 0 */
         let using_data_descriptor: bool = flags & (1 << 3) == 1 << 3;
-        if using_data_descriptor {
-            return Err(ZipError::UnsupportedArchive(
-                "The file length is not available in the local header",
-            ));
-        }
+        // if using_data_descriptor {
+        //     return Err(ZipError::UnsupportedArchive(
+        //         "The file length is not available in the local header",
+        //     ));
+        // }
 
         /* flags & (1 << 1) != 0 */
         let is_utf8: bool = flags & (1 << 11) != 0;
