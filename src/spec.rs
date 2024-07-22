@@ -178,9 +178,9 @@ pub(crate) trait FixedSizeBlock: Pod {
         reader.read_exact(block.as_bytes_mut())?;
         let block = Self::from_le(block);
 
-        if block.magic() != Self::MAGIC {
-            return Err(Self::WRONG_MAGIC_ERROR);
-        }
+        // if block.magic() != Self::MAGIC {
+        //     return Err(Self::WRONG_MAGIC_ERROR);
+        // }
         Ok(block)
     }
 
