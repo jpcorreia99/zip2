@@ -974,7 +974,7 @@ impl FixedSizeBlock for ZipLocalEntryBlock {
         self.magic
     }
 
-    const WRONG_MAGIC_ERROR: ZipError = ZipError::InvalidArchive("Invalid local file header");
+    const WRONG_MAGIC_ERROR: ZipError = ZipError::InvalidArchive("goofy error");
 
     to_and_from_le![
         (magic, spec::Magic),
