@@ -687,15 +687,6 @@ impl ZipFileData {
             ));
         }
 
-        /* FIXME: these were previously incorrect: add testing! */
-        /* flags & (1 << 3) != 0 */
-        let using_data_descriptor: bool = flags & (1 << 3) == 1 << 3;
-        // if using_data_descriptor {
-        //     return Err(ZipError::UnsupportedArchive(
-        //         "The file length is not available in the local header",
-        //     ));
-        // }
-
         /* flags & (1 << 1) != 0 */
         let is_utf8: bool = flags & (1 << 11) != 0;
         let compression_method = crate::CompressionMethod::parse_from_u16(compression_method);
@@ -706,6 +697,21 @@ impl ZipFileData {
         reader.read_exact(&mut file_name_raw)?;
         let mut extra_field = vec![0u8; extra_field_length];
         reader.read_exact(&mut extra_field)?;
+
+        /* FIXME: these were previously incorrect: add testing! */
+        /* flags & (1 << 3) != 0 */
+        let using_data_descriptor: bool = flags & (1 << 3) == 1 << 3;
+        if using_data_descriptor {
+            let file_name = match String::from_utf8(file_name_raw) {
+                Ok(name) => name,
+                Err(_) => return Err(ZipError::UnsupportedArchive("Invalid UTF-8 in file name")),
+            };
+            let err_msg = format!(
+                "The file length is not available in the local header for file with name {:?}",
+                file_name
+            );
+            return Err(ZipError::UnsupportedArchiveWithMsg(err_msg));
+        }
 
         let file_name: Box<str> = match is_utf8 {
             true => String::from_utf8_lossy(&file_name_raw).into(),

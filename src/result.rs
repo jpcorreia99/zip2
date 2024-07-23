@@ -26,6 +26,8 @@ pub enum ZipError {
 
     /// unsupported Zip archive: {0}
     UnsupportedArchive(&'static str),
+    /// same
+    UnsupportedArchiveWithMsg(String),
 
     /// specified file not found in archive
     FileNotFound,
@@ -55,6 +57,7 @@ impl From<ZipError> for io::Error {
             ZipError::Io(err) => err.kind(),
             ZipError::InvalidArchive(_) => io::ErrorKind::InvalidData,
             ZipError::UnsupportedArchive(_) => io::ErrorKind::Unsupported,
+            ZipError::UnsupportedArchiveWithMsg(_) => io::ErrorKind::Unsupported,
             ZipError::FileNotFound => io::ErrorKind::NotFound,
             ZipError::InvalidPassword => io::ErrorKind::InvalidInput,
         };
